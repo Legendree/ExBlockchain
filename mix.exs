@@ -17,7 +17,7 @@ defmodule ExBlockchain.MixProject do
     [
       extra_applications: [:logger],
       env: env(),
-      mod: {ExBlockchain.Application, []}
+      mod: {ExBlockchain, []}
     ]
   end
 
@@ -30,7 +30,11 @@ defmodule ExBlockchain.MixProject do
   end
 
   defp env do
-    [base_url: "https://api.blockchain.info/v2"]
+    [
+      base_url: "https://api.blockchain.info/v2",
+      pool_options: [timeout: 5_000, max_connections: 10],
+      use_connection_pool: true
+    ]
   end
 
   defp description do

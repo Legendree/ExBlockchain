@@ -1,18 +1,17 @@
 defmodule ExBlockchain do
-  @moduledoc """
-  Documentation for `ExBlockchain`.
-  """
+  # See https://hexdocs.pm/elixir/Application.html
+  # for more information on OTP Applications
+  @moduledoc false
 
-  @doc """
-  Hello world.
+  use Application
 
-  ## Examples
+  @impl true
+  def start(_type, _args) do
+    children = []
 
-      iex> ExBlockchain.hello()
-      :world
-
-  """
-  def hello do
-    :world
+    # See https://hexdocs.pm/elixir/Supervisor.html
+    # for other strategies and supported options
+    opts = [strategy: :one_for_one, name: ExBlockchain.Supervisor]
+    Supervisor.start_link(children, opts)
   end
 end
