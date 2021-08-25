@@ -1,4 +1,8 @@
 defmodule ExBlockchain.Request do
+  @moduledoc """
+  A simple Erlang's Hackney HTTP client wrapper
+  """
+
   @type headers :: [{String.t(), String.t()}]
   @type method :: :get | :post | :delete | :put
   @typep success_response ::
@@ -9,7 +13,8 @@ defmodule ExBlockchain.Request do
           success_response() | failure_response()
   def request(method, url, headers, payload, options)
       when method in [:get, :post, :delete, :put] do
-    {:ok, _, _, _} = :hackney.request(method, url, headers, payload, options)
+    :hackney.request(method, url, headers, payload, options)
+    |> parse_hackney_ref_to_body()
   end
 
   @spec request(method(), String.t(), headers()) :: success_response() | failure_response()
@@ -20,5 +25,13 @@ defmodule ExBlockchain.Request do
   @spec request(method(), String.t()) :: success_response() | failure_response()
   def request(method, url) when method in [:get, :post, :delete, :put] do
     request(method, url, [], "", [])
+  end
+
+  @spec parse_hackney_ref_to_body({:ok, term(), term(), reference()}) :: %{
+          String.t() => String.t()
+        }
+  defp parse_hackney_ref_to_body({:ok, _, _, ref}) do
+    {:ok, body} = :hackney.body(ref)
+    Jason.decode!([body])
   end
 end
