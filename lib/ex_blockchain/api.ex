@@ -40,4 +40,8 @@ defmodule ExBlockchain.Api do
   defp encodable_characters(byte) do
     byte != ?/ && byte != ?: && byte != ?? && byte != ?=
   end
+
+  def get_field(decoded_body, key) when is_bitstring(key) do
+    Map.get(decoded_body, key, nil)
+  end
 end
