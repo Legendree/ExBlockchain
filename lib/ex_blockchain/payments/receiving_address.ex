@@ -6,4 +6,8 @@ defmodule ExBlockchain.ReceivingAddress do
   def new(attrs \\ []) do
     struct!(ReceivingAddress, attrs)
   end
+
+  def initiate(invoice_id) do
+    ExBlockchain.Request.request(:get, ExBlockchain.Api.get_pubx_url(invoice_id))
+  end
 end
