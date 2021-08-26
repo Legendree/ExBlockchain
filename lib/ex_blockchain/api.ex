@@ -27,21 +27,31 @@ defmodule ExBlockchain.Api do
     Config.resolve(:secret, "")
   end
 
-  def get_pubx_url(invoice_id) do
+  def build_pubx_url(invoice_id) do
     encoded_callback_uri =
       URI.encode(
         "https://#{get_default_domain()}?invoice_id=#{invoice_id}",
-        &encodable_characters/1
+        &encodable_characters?/1
       )
 
     "https://api.blockchain.info/v2/receive?xpub=#{get_default_xpub_key()}&callback=#{encoded_callback_uri}&key=#{get_default_api_key()}"
   end
 
-  defp encodable_characters(byte) do
+  @spec encodable_characters?(byte()) :: boolean()
+  defp encodable_characters?(byte) do
     byte != ?/ && byte != ?: && byte != ?? && byte != ?=
   end
 
-  def get_field(decoded_body, key) when is_bitstring(key) do
-    Map.get(decoded_body, key, nil)
+  def convert_to_klist(value) when is_map(value) do
+    possible_atoms()
+    Enum.map(value, fn {k, v} -> {String.to_existing_atom(k), convert_to_klist(v)} end)
+  end
+
+  def convert_to_klist(value), do: value
+
+  def possible_atoms do
+    :address
+    :index
+    :callback
   end
 end
