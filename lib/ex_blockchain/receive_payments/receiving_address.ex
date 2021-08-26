@@ -10,8 +10,8 @@ defmodule ExBlockchain.ReceivingAddress do
         }
   defstruct [:address, :index, :callback, :description, :message]
 
-  @spec create(number()) :: __MODULE__.t()
-  def create(invoice_id) do
+  @spec generate(number()) :: __MODULE__.t()
+  def generate(invoice_id) do
     fields =
       Request.request(:get, Api.build_receiving_address_url(invoice_id)) |> Api.convert_to_klist()
 

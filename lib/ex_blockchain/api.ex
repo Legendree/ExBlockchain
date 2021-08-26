@@ -44,7 +44,10 @@ defmodule ExBlockchain.Api do
 
   def convert_to_klist(value) when is_map(value) do
     possible_atoms()
-    Enum.map(value, fn {k, v} -> {String.to_existing_atom(k), convert_to_klist(v)} end)
+
+    Enum.map(value, fn {k, v} ->
+      {camel_to_snake(k) |> String.to_existing_atom(), convert_to_klist(v)}
+    end)
   end
 
   def convert_to_klist(value), do: value
@@ -54,5 +57,9 @@ defmodule ExBlockchain.Api do
     :index
     :callback
     :message
+  end
+
+  defp camel_to_snake(value) do
+    Regex.replace(~r/(?<!^)(?=[A-Z])/, value, "_") |> String.downcase()
   end
 end

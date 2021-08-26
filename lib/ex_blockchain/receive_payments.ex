@@ -1,5 +1,5 @@
 defmodule ExBlockchain.ReceivePayments do
-  alias ExBlockchain.{ReceivingAddress}
+  alias ExBlockchain.{ReceivingAddress, BalanceUpdate}
 
   @type t :: %__MODULE__{
           receiving_address: ExBlockchain.ReceivingAddress.t() | nil
@@ -12,6 +12,10 @@ defmodule ExBlockchain.ReceivePayments do
   """
   @spec generate_receive_address(number()) :: ExBlockchain.ReceivingAddress.t()
   def generate_receive_address(invoice_id) do
-    ReceivingAddress.create(invoice_id)
+    ReceivingAddress.generate(invoice_id)
+  end
+
+  def request_balance_updates(fields) do
+    BalanceUpdate.create(fields)
   end
 end
