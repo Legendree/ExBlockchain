@@ -27,7 +27,7 @@ defmodule ExBlockchain.Api do
     Config.resolve(:secret, "")
   end
 
-  def build_pubx_url(invoice_id) do
+  def build_receiving_address_url(invoice_id) do
     encoded_callback_uri =
       URI.encode(
         "https://#{get_default_domain()}?invoice_id=#{invoice_id}",
@@ -53,5 +53,6 @@ defmodule ExBlockchain.Api do
     :address
     :index
     :callback
+    :message
   end
 end

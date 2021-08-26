@@ -4,12 +4,17 @@ defmodule ExBlockchain.ReceivingAddress do
   @type t :: %__MODULE__{
           address: String.t() | nil,
           index: integer() | nil,
-          callback: String.t() | iodata() | nil
+          callback: String.t() | iodata() | nil,
+          description: String.t() | iodata() | nil,
+          message: String.t() | iodata() | nil
         }
-  defstruct [:address, :index, :callback]
+  defstruct [:address, :index, :callback, :description, :message]
 
+  @spec create(number()) :: __MODULE__.t()
   def create(invoice_id) do
-    fields = Request.request(:get, Api.build_pubx_url(invoice_id)) |> Api.convert_to_klist()
+    fields =
+      Request.request(:get, Api.build_receiving_address_url(invoice_id)) |> Api.convert_to_klist()
+
     struct!(__MODULE__, fields)
   end
 end

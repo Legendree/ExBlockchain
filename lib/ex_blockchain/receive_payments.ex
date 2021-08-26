@@ -7,10 +7,11 @@ defmodule ExBlockchain.ReceivePayments do
   defstruct [:receiving_address]
 
   @doc """
-  Generating a Receiving Address [GET
+  Generating a Receiving Address [GET]
   Provide unique, unused bitcoin addresses to your customers
   """
-  def receive_address(invoice_id) do
+  @spec generate_receive_address(number()) :: ExBlockchain.ReceivingAddress.t()
+  def generate_receive_address(invoice_id) do
     ReceivingAddress.create(invoice_id)
   end
 end
